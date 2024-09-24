@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  python:
+    container_name: epsi-innov 
+    build:
+      context: .
+    # Used to trigger hot-reloading on main.py files
+    command: nodemon eventbot/main.py
+    working_dir: /app
+    tty: true
+    volumes:
+      - ./:/app/
+  postgres:
+    container_name: postgres
+    image: postgres:16.0
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: pgpass
+    ports:
+      - 5432:5432
+    volumes:
+      - ./data:/var/lib/postgresql/data
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4
+    restart: always
+    ports:
+      - 81:80
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin
